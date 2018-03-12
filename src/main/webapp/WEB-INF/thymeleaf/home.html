@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+</head>
+<body th:inline="text">
+	<h1>Home</h1>
+	<a th:href="@{?language=en}"><span th:text="#{home.label.english}">Ingles</span></a>
+	|
+	<a th:href="@{?language=es}"><span th:text="#{home.label.spanish}">Español</span></a>
+
+	<p>
+		<span
+			th:text="'Hoy es ' + ${#calendars.format(serverTime, 'dd/MM/yyyy')} + '!!!'">11/03/1964</span>
+	</p>
+
+	<div th:include="fragments :: autor" ></div>
+</body>
+</html>
+
+
+<!--  /* 
+
+	<p>
+		<span th:text="|Hoy es ${#calendars.format(serverTime, 'dd/MM/yyyy')}!!!|">11/03/1964</span>
+	</p>
+	
+	<p th:with="now=${#dates.createNow()}" th:text="|Now: ${#dates.format(now,'dd/MMM/yyyy HH:mm:ss')}|"></p>
+	
+	<p th:with="today=${#dates.createToday()}" th:text="|Today: ${#dates.format(today,'dd/MMM/yyyy HH:mm:ss')}|"></p>
+
+	<p th:with="now=${#calendars.createNow()}" th:text="|Now: ${#calendars.dayOfWeekName(now)}|"></p>
+	
+	<p th:with="today=${#calendars.createToday()}" th:text="|Today: ${#calendars.monthNameShort(today)}|"></p>
+	
+	<p th:with="seq=${#numbers.sequence(1,100)}" th:text="${#numbers.formatInteger(#aggregates.sum(seq),3,'POINT')}" ></p>
+	
+	<p th:text="${#strings.capitalizeWords('pep mendez')}" />
+	
+	<ul th:each="i: ${#numbers.sequence(1,5)}" >
+		<li th:id="${#ids.seq('xxx')}" th:text="|${i} ${#strings.abbreviate(#strings.randomAlphanumeric(15),10)}|" >xx</li>
+	</ul>
+	
+	<p th:with="now = ${#dates.createNow()}" th:text="${!#bools.isTrue(now)}" ></p>
+	
+	<p><span th:text="${#vars.size()}">xx</span></p>
+
+	<div th:with="t=${#lists.size(userEntityList)}">
+
+		<p>
+			<span th:text="|Tamaño de la lista: ${(t > 0) ? t : 'No hay registros'} registros.|">0</span>
+		</p>
+
+		<table th:if="${#bools.isTrue(t)}">
+			<tr>
+				<th>Indice</th>
+				<th>Nombre</th>
+			</tr>
+			<tr th:each="user,userStatus: ${userEntityList}">
+				<td th:text="${userStatus.index}">00000</td>
+				<td>[[${user.name}]]</td>
+			</tr>
+		</table>
+	</div>
+
+*/ -->
+
