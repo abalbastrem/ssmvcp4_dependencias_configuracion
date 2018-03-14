@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -31,6 +32,20 @@ import es.smartcoding.ssmvcp4.controllers.SimpleDemoController;
 @Configuration
 @ComponentScan(basePackageClasses = { RootPackage.class })
 public class DispatcherServletConfig extends WebMvcConfigurerAdapter {
+	
+	/*
+	 * Este método añade un controlador que asocia la URL '/login' con la vista
+	 * 'login'.
+	 * 
+	 * Es conveniente en aquellos casos donde el controlador no necesita hacer
+	 * ninguna acción más allá de redirigir la petición a la vista como en el
+	 * caso del login.
+	 */
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/login").setViewName("login");
+		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+	}
 
 	/**
 	 * Interface que implementan las clases que resuelven nombres de vistas
