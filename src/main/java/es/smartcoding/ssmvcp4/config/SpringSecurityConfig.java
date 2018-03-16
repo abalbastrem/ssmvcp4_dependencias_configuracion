@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -15,40 +17,68 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/resources/");
-	}
+	}	
 
- @Override
- protected void configure(HttpSecurity http) throws Exception {
-// http.authorizeRequests();
-// http.authorizeRequests()
-// .antMatchers("/", "/home").permitAll()
-// 	.anyRequest().authenticated()
-// 	.and()
-// 		.formLogin()
-// .loginPage("/login")
-// .permitAll()
-// .and()
-// .logout()
-// .permitAll();
-// 	.httpBasic();
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+	// http.authorizeRequests();
+	// http.authorizeRequests()
+	// .antMatchers("/", "/home").permitAll()
+	// 	.anyRequest().authenticated()
+	// 	.and()
+	// 		.formLogin()
+	// .loginPage("/login")
+	// .permitAll()
+	// .and()
+	// .logout()
+	// .permitAll();
+	// 	.httpBasic();
+	
+		// 2 //
+//		 http.authorizeRequests()
+//		 	.anyRequest()
+//		 	.authenticated()
+//		 	.and()
+//		 .formLogin()
+//		 	.loginPage("/login")
+//		 	.permitAll()
+//		 	.and()
+//		 .logout()
+//		 	.permitAll()
+//		 	.and()
+//		 .csrf().disable();
+		
+		// 3. amb csrf token //
+		http
+		.authorizeRequests()
+			.anyRequest().authenticated().and()
+			.formLogin().loginPage("/login").permitAll().and()
+			.logout().permitAll().and()
+			.csrf().csrfTokenRepository(csrfTokenRepository());
+			
+	 }
 	 
-	 http.authorizeRequests()
-	 	.anyRequest()
-	 	.authenticated()
-	 	.and()
-	 .formLogin()
-	 	.loginPage("/login")
-	 	.permitAll()
-	 	.and()
-	 .logout()
-	 	.permitAll()
-	 	.and()
-	 .csrf().disable();
- }
- 
- @Autowired
+	@Autowired
 	public void configureGoblal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+		// Autenticación em memoria
+//		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+		
+		// Autenticación conectando a BBDD MySQL
+		auth.jdbcAuthentication().dataSource(dataSource)
+		.usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?")
+		.authoritiesByUsernameQuery(
+				"SELECT u.username AS username, r.name AS authority FROM users u, roles r, roles_users ru WHERE u.id=ru.user_id AND r.id=ru.role_id AND username=?");
 	}
- 
+	
+	/*
+	 * Este método guarda el token CRSF (Cross-site Request Forgery)
+	 * con el que está asociado la petición en la sesión
+	 */
+	private CsrfTokenRepository csrfTokenRepository() {
+		// Implementación de la interfaz CsrfTokenRepository que guarda un CrsfToken en la HttpSession
+		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+		repository.setSessionAttributeName("_csrf");
+		return repository;
+	}
+	 
 }
