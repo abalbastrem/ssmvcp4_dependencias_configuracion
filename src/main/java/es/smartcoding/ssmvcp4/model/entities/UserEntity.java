@@ -38,6 +38,11 @@ public class UserEntity implements Serializable {
 	private long id;
 	@Column(name = "name", length = 32)
 	private String name;
+	@Column(name = "username", length = 32)
+	private String username;
+	@Column(name = "password", length = 32)
+	private String password;
+	private Boolean enabled;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfCreation;
 	@OneToOne(mappedBy = "user")

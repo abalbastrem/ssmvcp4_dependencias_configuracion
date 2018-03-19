@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ public class SimpleRestfulController {
 	@Autowired
 	private UserService userService;
 
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/users")
 	/* ResponseEntity representa una respuesta HTTP */
 	public ResponseEntity<Collection<UserEntity>> getUsers() {

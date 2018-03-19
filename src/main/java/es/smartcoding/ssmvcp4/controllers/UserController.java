@@ -1,5 +1,6 @@
 package es.smartcoding.ssmvcp4.controllers;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,11 +35,13 @@ public class UserController {
 	 * Un objeto ModelAndView contiene ambos: el la vista y el modelo de datos:
 	 * un conjunto de parejas (clave=valor)
 	 */
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/allUsers")
-	public ModelAndView getUsers() {
+	public ModelAndView getUsers(Principal principal) {
 		ModelAndView mav = new ModelAndView("users");
 		Collection<UserEntity> users = userService.findAll();
 		mav.addObject("userEntityList", users);
+		mav.addObject("principal", principal.getName());
 		return mav;
 	}
 
@@ -59,6 +63,7 @@ public class UserController {
 	 * valor retornado por el Callable.
 	 * 
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping("/delete/{id}")
 	public Callable<String> deleteUser(@PathVariable long id) {
 		logger.info("Entrando en UserController -> delete/id");
@@ -79,6 +84,7 @@ public class UserController {
 	 *  
 	 *  /application/users/3;q=34
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping("/users/{id}")
 	public ResponseEntity<UserEntity> showUser(@PathVariable(value = "id") long id,
 			@MatrixVariable(name = "q", pathVar = "id", required = false, defaultValue = "-1") int q) {

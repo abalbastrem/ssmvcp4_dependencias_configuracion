@@ -3,6 +3,7 @@ package es.smartcoding.ssmvcp4.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -32,6 +33,7 @@ public class SimpleDemoController extends MultiActionController {
 	 * @return ModelAndView
 	 * @throws Exception
 	 */
+	@PreAuthorize("isAuthenticated()")
 	public ModelAndView action1(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		return new ModelAndView("action1", "msg", "action1");
@@ -44,6 +46,7 @@ public class SimpleDemoController extends MultiActionController {
 	 * @return Un nombre de vista lógico.
 	 * @throws Exception
 	 */
+	@PreAuthorize("isAuthenticated()")
 	public String action2(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		return "action2";

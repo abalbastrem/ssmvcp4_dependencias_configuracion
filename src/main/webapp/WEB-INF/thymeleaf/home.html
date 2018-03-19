@@ -16,6 +16,15 @@
 		<span
 			th:text="'Hoy es ' + ${#calendars.format(serverTime, 'dd/MM/yyyy')} + '!!!'">11/03/1964</span>
 	</p>
+	
+	Usuario:
+	<span sec:authentication="name">Bob</span> Roles:
+	<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+	
+	<div sec:authorize="hasRole('ROLE_ADMIN')">Contenido solo para administradores.</div>
+	<div sec:authorize="hasRole('ROLE_USER')">Contenido solo para usuarios.</div>
+	
+	<a th:href="@{/login?logout}">Logout</a>
 
 	<div th:include="fragments :: autor" ></div>
 </body>
